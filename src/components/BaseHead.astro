@@ -31,6 +31,7 @@ const {
 
 const pageTitle = title === SITE_NAME ? title : `${title} | ${SITE_NAME}`;
 const canonical = new URL(canonicalURL, Astro.site ?? Astro.url).href;
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 ---
 
 <!-- Charset & viewport -->
@@ -72,3 +73,15 @@ const canonical = new URL(canonicalURL, Astro.site ?? Astro.url).href;
 
 <!-- Global stylesheet -->
 <link rel="stylesheet" href="/src/styles/global.css" />
+
+{gaId && (
+  <Fragment>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script is:inline define:vars={{ gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </Fragment>
+)}
